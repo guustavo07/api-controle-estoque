@@ -1,0 +1,10 @@
+﻿namespace APIChurrascaria.Models
+{
+    public class Cliente
+    {
+        public int Id { get; set; }
+        public string? Nome { get; set; }
+        public int Num_Mesa { get; set; }
+       
+    }
+}
