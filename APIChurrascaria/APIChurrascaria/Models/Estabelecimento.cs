@@ -7,7 +7,8 @@
         public string Endereco { get; set; }
         public string Estado { get; set; }
         public int Num_Telefone { get; set; }
-        public Pedido Pedido { get; set; }
-        public int PedidoId { get; set; }
+        public List<Pedido> Pedido { get; set; } = new List<Pedido>();
+
+
     }
 }

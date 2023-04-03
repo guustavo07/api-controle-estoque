@@ -1,6 +1,4 @@
-﻿using System.Security.Cryptography.X509Certificates;
-
-namespace APIChurrascaria.Models
+﻿namespace APIChurrascaria.Models
 {
     public class EntradaProduto
     {

@@ -8,5 +8,7 @@
         public string Endereco { get; set; }
         public string Email { get; set; }
         public int Num_Telefone { get; set; }
+
+        public List<EntradaProduto> EntradaProdutos { get; set; } = new List<EntradaProduto>();
     }
 }
