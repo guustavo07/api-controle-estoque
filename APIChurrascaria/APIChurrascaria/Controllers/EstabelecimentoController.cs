@@ -1,4 +1,5 @@
 ﻿using APIChurrascaria.Infra.Data;
+using APIChurrascaria.Models;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -26,7 +27,7 @@ namespace APIChurrascaria.Controllers
         [HttpGet("{id}")]
         public IActionResult Get(int id)
         {
-            var estabelecimento = dbcontext.Estabelecimento.Find(id);
+            var estabelecimento = dbcontext.Estabelecimentos.Find(id);
             if (estabelecimento == null)
             {
                 return NotFound();
@@ -61,7 +62,7 @@ namespace APIChurrascaria.Controllers
             estabelecimentoExistente.Nome = estabelecimento.Nome;
             estabelecimentoExistente.Endereco = estabelecimento.Endereco;
             estabelecimentoExistente.Estado = estabelecimento.Estado;
-            estabelecimentoExistente.Telefone = estabelecimento.Telefone;
+            estabelecimentoExistente.Num_Telefone = estabelecimento.Num_Telefone;
             dbcontext.SaveChanges();
             return NoContent();
         }

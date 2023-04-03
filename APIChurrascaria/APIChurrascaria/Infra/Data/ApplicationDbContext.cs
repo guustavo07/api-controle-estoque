@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using APIChurrascaria.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace APIChurrascaria.Infra.Data
 {
@@ -13,7 +14,7 @@ namespace APIChurrascaria.Infra.Data
         public DbSet<Fornecedor> Fornecedores { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-            => optionsBuilder.UseNpgsql("Host=my_host;Database=my_db;Username=postgres;Password=123456");
+            => optionsBuilder.UseNpgsql("Host=localhost;Database=estoquedb;Username=postgres;Password=123456");
 
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }

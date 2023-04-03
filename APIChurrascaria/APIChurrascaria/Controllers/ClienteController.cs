@@ -1,4 +1,5 @@
 ﻿using APIChurrascaria.Infra.Data;
+using APIChurrascaria.Models;
 using Microsoft.AspNetCore.Mvc;
 
 
@@ -37,7 +38,7 @@ namespace APIChurrascaria.Controllers
         [HttpPost]
         public IActionResult Post([FromBody] Cliente cliente)
         {
-            if (cliente == null)
+            if (cliente == null || string.IsNullOrEmpty(cliente.Nome))
             {
                 return BadRequest();
             }

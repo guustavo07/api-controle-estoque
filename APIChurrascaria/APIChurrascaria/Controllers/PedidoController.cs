@@ -1,4 +1,5 @@
 ﻿using APIChurrascaria.Infra.Data;
+using APIChurrascaria.Models;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -59,11 +60,9 @@ namespace APIChurrascaria.Controllers
             {
                 return NotFound();
             }
-            pedidoExistente.ClientId = pedido.ClientId;
-            pedidoExistente.EstabelecimentoId = pedido.EstabelecimentoId;
-            pedidoExistente.ValTotal = pedido.ValTotal;
+
+            pedidoExistente.Valor_Total = pedido.Valor_Total;
             pedidoExistente.Status = pedido.Status;
-            pedidoExistente.NumPedido = pedido.NumPedido;
             dbcontext.SaveChanges();
             return NoContent();
         }

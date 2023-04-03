@@ -1,4 +1,5 @@
 ﻿using APIChurrascaria.Infra.Data;
+using APIChurrascaria.Models;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -58,11 +59,11 @@ namespace APIChurrascaria.Controllers
             {
                 return NotFound();
             }
-            fornecedorExistente.NomeFornecedor = fornecedor.NomeFornecedor;
-            fornecedorExistente.Cnpj = fornecedor.Cnpj;
+            fornecedorExistente.Nome = fornecedor.Nome;
+            fornecedorExistente.CNPJ = fornecedor.CNPJ;
             fornecedorExistente.Endereco = fornecedor.Endereco;
             fornecedorExistente.Email = fornecedor.Email;
-            fornecedorExistente.Telefone = fornecedor.Telefone;
+            fornecedorExistente.Num_Telefone = fornecedor.Num_Telefone;
             dbcontext.SaveChanges();
             return NoContent();
         }

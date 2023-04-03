@@ -1,4 +1,5 @@
 ﻿using APIChurrascaria.Infra.Data;
+using APIChurrascaria.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,17 +13,17 @@ namespace APIChurrascaria.Controllers
     {
         private readonly ApplicationDbContext dbContext;
 
-        public EntradaProdutoController(ApplicationDbContext dbContext)
+        public EntradaProdutoController(ApplicationDbContext context)
         {
-            dbContext = dbContext;
+            dbContext = context;
         }
 
         [HttpGet]
         public IActionResult Get()
         {
-            var entradas = dbContext.EntradaProdutos
-                .Include(e => e.Fornecedor)
-                .Include(e => e.Produto)
+            var entradas = dbContext.EntradasProdutos
+                .Include(e => e.FornecedorId)
+                .Include(e => e.ProdutoId)
                 .ToList();
 
             return Ok(entradas);
@@ -31,9 +32,9 @@ namespace APIChurrascaria.Controllers
         [HttpGet("{id}")]
         public IActionResult Get(int id)
         {
-            var entrada = dbContext.EntradaProdutos
-                .Include(e => e.Fornecedor)
-                .Include(e => e.Produto)
+            var entrada = dbContext.EntradasProdutos
+                .Include(e => e.FornecedorId)
+                .Include(e => e.ProdutoId)
                 .FirstOrDefault(e => e.Id == id);
 
             if (entrada == null)
@@ -52,7 +53,7 @@ namespace APIChurrascaria.Controllers
                 return BadRequest();
             }
 
-            dbContext.EntradaProdutos.Add(entradaProduto);
+            dbContext.EntradasProdutos.Add(entradaProduto);
             dbContext.SaveChanges();
 
             return CreatedAtAction(nameof(Get), new { id = entradaProduto.Id }, entradaProduto);
@@ -66,15 +67,15 @@ namespace APIChurrascaria.Controllers
                 return BadRequest();
             }
 
-            var entradaExistente = dbContext.EntradaProdutos.Find(id);
+            var entradaExistente = dbContext.EntradasProdutos.Find(id);
             if (entradaExistente == null)
             {
                 return NotFound();
             }
 
             entradaExistente.Quantidade = entradaProduto.Quantidade;
-            entradaExistente.Data_Validade = entradaProduto.Data_Validade;
-            entradaExistente.NumDocumento = entradaProduto.NumDocumento;
+            entradaExistente.DtValidade = entradaProduto.DtValidade;
+            entradaExistente.Num_Documento = entradaProduto.Num_Documento;
             entradaExistente.FornecedorId = entradaProduto.FornecedorId;
             entradaExistente.ProdutoId = entradaProduto.ProdutoId;
 
@@ -86,13 +87,13 @@ namespace APIChurrascaria.Controllers
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            var entrada = dbContext.EntradaProdutos.Find(id);
+            var entrada = dbContext.EntradasProdutos.Find(id);
             if (entrada == null)
             {
                 return NotFound();
             }
 
-            dbContext.EntradaProdutos.Remove(entrada);
+            dbContext.EntradasProdutos.Remove(entrada);
             dbContext.SaveChanges();
 
             return NoContent();

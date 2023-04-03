@@ -1,4 +1,5 @@
 ﻿using APIChurrascaria.Infra.Data;
+using APIChurrascaria.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -16,7 +17,7 @@ namespace APIChurrascaria.Controllers
         {
             dbcontext = context;
         }
-        // GET: api/<EstoqueController>
+
         [HttpGet]
         public IActionResult Get()
         {
@@ -61,7 +62,7 @@ namespace APIChurrascaria.Controllers
             }
             estoqueExistente.ProdutoId = estoque.ProdutoId;
             estoqueExistente.Quantidade = estoque.Quantidade;
-            estoqueExistente.Data_validade = estoque.Data_validade;
+            estoqueExistente.DtValidade = estoque.DtValidade;
             dbcontext.SaveChanges();
             return NoContent();
         }
