@@ -10,14 +10,14 @@ namespace APIChurrascaria.Mappings
         public void Configure(EntityTypeBuilder<Pedido> builder)
         {
             builder.Property(p => p.Valor_Total)
-                .HasColumnType("double")
-                .IsRequired();
+                .HasColumnType("double");
             builder.Property(p => p.Status)
-                .HasColumnType("integer")
-                .IsRequired();
+                .HasColumnType("integer");
             builder.Property(p => p.Valor_Total)
-                .HasColumnType("double")
-                .IsRequired();
+                .HasColumnType("double");
+            builder.HasMany(pai => pai.PedidoProduto)
+                .WithOne(filho => filho.Pedido)
+                .HasForeignKey(filho => filho.PedidoId);
         }
     }
 }

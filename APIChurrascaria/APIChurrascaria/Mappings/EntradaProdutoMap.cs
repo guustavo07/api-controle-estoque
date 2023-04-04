@@ -9,11 +9,9 @@ namespace APIChurrascaria.Mappings
         public void Configure(EntityTypeBuilder<EntradaProduto> builder)
         {
             builder.Property(p => p.DtValidade)
-                .HasColumnType("datetime")
-                .IsRequired();
+                .HasColumnType("datetime");
             builder.Property(p => p.Num_Documento)
-                .HasColumnType("integer")
-                .IsRequired();
+                .HasColumnType("integer");
 
         }
     }

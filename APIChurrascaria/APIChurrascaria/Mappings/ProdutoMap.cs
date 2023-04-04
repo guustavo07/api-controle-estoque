@@ -9,12 +9,16 @@ namespace APIChurrascaria.Mappings
         public void Configure(EntityTypeBuilder<Produto> builder)
         {
             builder.Property(p => p.Nome)
-                .HasColumnType("varchar(255)")
-                .IsRequired();
+                .HasColumnType("varchar(255)");
             builder.Property(p => p.Valor)
-                .HasColumnType("double")
-                .IsRequired();
+                .HasColumnType("double");
             builder.HasMany(pai => pai.EntradaProdutos)
+                .WithOne(filho => filho.Produto)
+                .HasForeignKey(filho => filho.ProdutoId);
+            builder.HasMany(pai => pai.PedidoProduto)
+                .WithOne(filho => filho.Produto)
+                .HasForeignKey(filho => filho.ProdutoId);
+            builder.HasMany(pai => pai.ProdutoFornecedor)
                 .WithOne(filho => filho.Produto)
                 .HasForeignKey(filho => filho.ProdutoId);
         }

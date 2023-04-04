@@ -1031,11 +1031,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Meta3\\Downloads\\api-controle-estoque-Victor\\api-controle-estoque-Victor\\APIChurrascaria\\APIChurrascaria\\APIChurrascaria.csproj",
+      "projectUniqueName": "C:\\Users\\Meta3\\Downloads\\api-controle-estoque\\api-controle-estoque-Victor\\APIChurrascaria\\APIChurrascaria\\APIChurrascaria.csproj",
       "projectName": "APIChurrascaria",
-      "projectPath": "C:\\Users\\Meta3\\Downloads\\api-controle-estoque-Victor\\api-controle-estoque-Victor\\APIChurrascaria\\APIChurrascaria\\APIChurrascaria.csproj",
+      "projectPath": "C:\\Users\\Meta3\\Downloads\\api-controle-estoque\\api-controle-estoque-Victor\\APIChurrascaria\\APIChurrascaria\\APIChurrascaria.csproj",
       "packagesPath": "C:\\Users\\Meta3\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Meta3\\Downloads\\api-controle-estoque-Victor\\api-controle-estoque-Victor\\APIChurrascaria\\APIChurrascaria\\obj\\",
+      "outputPath": "C:\\Users\\Meta3\\Downloads\\api-controle-estoque\\api-controle-estoque-Victor\\APIChurrascaria\\APIChurrascaria\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\Meta3\\AppData\\Roaming\\NuGet\\NuGet.Config",

@@ -2,9 +2,10 @@
 {
     public class PedidoProduto
     {
-        public Pedido Pedidos { get; set; }
+        public int Id { get; set; }
+        public Pedido Pedido { get; set; }
         public int PedidoId { get; set; }
-        public Produto Produtos { get; set; }
+        public Produto Produto { get; set; }
         public int ProdutoId { get; set; }
     }
 }

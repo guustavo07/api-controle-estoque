@@ -9,8 +9,7 @@ namespace APIChurrascaria.Mappings
         public void Configure(EntityTypeBuilder<Cliente> builder)
         {
             builder.Property(p => p.Nome)
-                .HasColumnType("varchar(255)")
-                .IsRequired();
+                .HasColumnType("varchar(255)");
             builder.HasMany(pai => pai.Pedido)
                 .WithOne(filho => filho.Cliente)
                 .HasForeignKey(filho => filho.ClienteId);

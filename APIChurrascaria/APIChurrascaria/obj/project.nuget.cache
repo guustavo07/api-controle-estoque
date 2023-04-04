@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "MqEucyqDu2wNCDvoupcmDjIaw5ypVQGU/CDRS/9IwJxt3Qh+OnSVtAJSc/azRjPmoGWsV5sk0xZyITG+I7xghw==",
+  "dgSpecHash": "KrenuyzuL3YE66UV0/jxDKZRZuDNnNaWESEys9PxOYW6+EGZ9axqufl7gDohat4iUk546qJ2RwUNUMZKMjBpQA==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Meta3\\Downloads\\api-controle-estoque-Victor\\api-controle-estoque-Victor\\APIChurrascaria\\APIChurrascaria\\APIChurrascaria.csproj",
+  "projectFilePath": "C:\\Users\\Meta3\\Downloads\\api-controle-estoque\\api-controle-estoque-Victor\\APIChurrascaria\\APIChurrascaria\\APIChurrascaria.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Meta3\\.nuget\\packages\\humanizer.core\\2.8.26\\humanizer.core.2.8.26.nupkg.sha512",
     "C:\\Users\\Meta3\\.nuget\\packages\\microsoft.entityframeworkcore\\6.0.0\\microsoft.entityframeworkcore.6.0.0.nupkg.sha512",

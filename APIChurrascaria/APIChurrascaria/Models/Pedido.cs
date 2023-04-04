@@ -12,5 +12,6 @@ namespace APIChurrascaria.Models
         public int EstabelecimentoId { get; set; }
         public Cliente Cliente { get; set; }
         public Estabelecimento Estabelecimento { get; set; }
+        public List<PedidoProduto> PedidoProduto { get; set; } = new List<PedidoProduto>();
     }
 }

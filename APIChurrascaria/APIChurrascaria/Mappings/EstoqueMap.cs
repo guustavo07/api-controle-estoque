@@ -9,8 +9,7 @@ namespace APIChurrascaria.Mappings
         public void Configure(EntityTypeBuilder<Estoque> builder)
         {
             builder.Property(p => p.DtValidade)
-                .HasColumnType("datetime")
-                .IsRequired();
+                .HasColumnType("datetime");
         }
     }
 }
