@@ -10,6 +10,9 @@ namespace APIChurrascaria.Mappings
         {
             builder.Property(p => p.DtValidade)
                 .HasColumnType("datetime");
+            builder.HasMany(pai => pai.Produto)
+                .WithOne(filho => filho.Estoque)
+                .HasForeignKey(filho => filho.EstoqueId);
         }
     }
 }
