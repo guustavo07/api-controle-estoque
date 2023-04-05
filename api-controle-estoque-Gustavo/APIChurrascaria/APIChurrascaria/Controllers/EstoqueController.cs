@@ -16,17 +16,17 @@ namespace APIChurrascaria.Controllers
     {
         private readonly IEstoqueRepositorio _estoqueRepositorio;
         private readonly IMapper _mapper;
-        public EstoqueController(IClienteRepositorio estoqueRepositorio, IMapper mapper)
+        public EstoqueController(IEstoqueRepositorio estoqueRepositorio, IMapper mapper)
         {
-            estoqueRepositorio = estoqueRepositorio;
+            _estoqueRepositorio = estoqueRepositorio;
             _mapper = mapper;
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<EstoqueDTO>>> Get()
+        public async Task<ActionResult<List<EstoqueDTO>>> GetAll()
         {
             List<Estoque> estoques = await _estoqueRepositorio.GetAllItens();
-            return Ok(_mapper.Map<EstoqueDTO>(estoques));
+            return Ok(_mapper.Map<List<EstoqueDTO>>(estoques));
         }
 
         [HttpGet("{id}")]

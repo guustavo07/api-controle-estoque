@@ -26,7 +26,7 @@ namespace APIChurrascaria.Controllers
         public async Task<ActionResult<List<EntradaDTO>>> GetAll()
         {
             List<EntradaProduto> entradaprodutos = await _EntradaProdutoRepositorio.GetAll();
-            return Ok(_mapper.Map<EntradaDTO>(entradaprodutos));
+            return Ok(_mapper.Map<List<EntradaDTO>>(entradaprodutos));
         }
 
         [HttpGet("{id}")]

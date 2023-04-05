@@ -3,6 +3,7 @@ using System;
 using APIChurrascaria.Infra.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace APIChurrascaria.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230405162939_DTOUpgrade")]
+    partial class DTOUpgrade
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -38,7 +40,7 @@ namespace APIChurrascaria.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Clientes", (string)null);
+                    b.ToTable("Clientes");
                 });
 
             modelBuilder.Entity("APIChurrascaria.Models.EntradaProduto", b =>
@@ -70,7 +72,7 @@ namespace APIChurrascaria.Migrations
 
                     b.HasIndex("ProdutoId");
 
-                    b.ToTable("EntradasProdutos", (string)null);
+                    b.ToTable("EntradasProdutos");
                 });
 
             modelBuilder.Entity("APIChurrascaria.Models.Estabelecimento", b =>
@@ -99,7 +101,7 @@ namespace APIChurrascaria.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Estabelecimentos", (string)null);
+                    b.ToTable("Estabelecimentos");
                 });
 
             modelBuilder.Entity("APIChurrascaria.Models.Estoque", b =>
@@ -121,7 +123,7 @@ namespace APIChurrascaria.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Estoques", (string)null);
+                    b.ToTable("Estoques");
                 });
 
             modelBuilder.Entity("APIChurrascaria.Models.Fornecedor", b =>
@@ -153,7 +155,7 @@ namespace APIChurrascaria.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Fornecedores", (string)null);
+                    b.ToTable("Fornecedores");
                 });
 
             modelBuilder.Entity("APIChurrascaria.Models.Pedido", b =>
@@ -182,7 +184,7 @@ namespace APIChurrascaria.Migrations
 
                     b.HasIndex("EstabelecimentoId");
 
-                    b.ToTable("Pedidos", (string)null);
+                    b.ToTable("Pedidos");
                 });
 
             modelBuilder.Entity("APIChurrascaria.Models.PedidoProduto", b =>
@@ -205,7 +207,7 @@ namespace APIChurrascaria.Migrations
 
                     b.HasIndex("ProdutoId");
 
-                    b.ToTable("PedidoProduto", (string)null);
+                    b.ToTable("PedidoProduto");
                 });
 
             modelBuilder.Entity("APIChurrascaria.Models.Produto", b =>
@@ -233,7 +235,7 @@ namespace APIChurrascaria.Migrations
 
                     b.HasIndex("EstoqueId");
 
-                    b.ToTable("Produtos", (string)null);
+                    b.ToTable("Produtos");
                 });
 
             modelBuilder.Entity("APIChurrascaria.Models.ProdutoFornecedor", b =>
@@ -256,7 +258,7 @@ namespace APIChurrascaria.Migrations
 
                     b.HasIndex("ProdutoId");
 
-                    b.ToTable("ProdutoFornecedor", (string)null);
+                    b.ToTable("ProdutoFornecedor");
                 });
 
             modelBuilder.Entity("APIChurrascaria.Models.EntradaProduto", b =>
