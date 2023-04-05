@@ -44,7 +44,7 @@ namespace APIChurrascaria.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<EstoqueDTO>> Put([FromBody] Estoque estoqueModel, int id)
+        public async Task<ActionResult<EstoqueDTO>> Put([FromBody] EstoqueDTO estoqueModel, int id)
         {
             estoqueModel.Id = id;
 

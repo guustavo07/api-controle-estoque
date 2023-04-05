@@ -37,14 +37,14 @@ namespace APIChurrascaria.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<ProdutoDTO>> Post([FromBody] Produto produtoModel)
+        public async Task<ActionResult<ProdutoDTO>> Post([FromBody] ProdutoDTO produtoModel)
         {
             Produto produto = await _produtoRepositorio.AddProduto(_mapper.Map<Produto>(produtoModel));
             return Ok(_mapper.Map<ProdutoDTO>(produto));
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<ProdutoDTO>> Put([FromBody] Produto produtoModel, int id)
+        public async Task<ActionResult<ProdutoDTO>> Put([FromBody] ProdutoDTO produtoModel, int id)
         {
             produtoModel.Id = id;
 
