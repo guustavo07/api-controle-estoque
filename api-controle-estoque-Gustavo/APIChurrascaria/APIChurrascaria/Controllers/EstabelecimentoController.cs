@@ -1,83 +1,61 @@
-﻿using APIChurrascaria.Infra.Data;
+﻿using APIChurrascaria.DTO;
+using APIChurrascaria.Infra.Data;
 using APIChurrascaria.Models;
+using APIChurrascaria.Repository.Interfaces;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace APIChurrascaria.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/Estabelecimento")]
     [ApiController]
     public class EstabelecimentoController : ControllerBase
     {
-        private readonly ApplicationDbContext dbcontext;
-
-    public EstabelecimentoController(ApplicationDbContext context)
-    {
-        dbcontext = context;
-    }
+        private readonly IEstabelecimentoRepositorio _estabelecimentoRepositorio;
+        private readonly IMapper _mapper;
+        public EstabelecimentoController(IEstabelecimentoRepositorio estabelecimentoRepositorio, IMapper mapper)
+        {
+            _estabelecimentoRepositorio = estabelecimentoRepositorio;
+            _mapper = mapper;
+        }
 
         [HttpGet]
-        public IActionResult Get()
+        public async Task<ActionResult<List<EstabelecimentoDTO>>> GetAll()
         {
-            var estabelecimentos = dbcontext.Estabelecimentos.ToList();
-            return Ok(estabelecimentos);
+            List<Estabelecimento> estabelecimentos = await _estabelecimentoRepositorio.GetAll();
+            return Ok(_mapper.Map<List<EstabelecimentoDTO>>(estabelecimentos));
         }
 
         [HttpGet("{id}")]
-        public IActionResult Get(int id)
+        public async Task<ActionResult<EstabelecimentoDTO>> Get(int id)
         {
-            var estabelecimento = dbcontext.Estabelecimentos.Find(id);
-            if (estabelecimento == null)
-            {
-                return NotFound();
-            }
-            return Ok(estabelecimento);
+            Estabelecimento estabelecimento = await _estabelecimentoRepositorio.GetEstabelecimento(id);
+            return Ok(_mapper.Map<EstabelecimentoDTO>(estabelecimento));
         }
 
         [HttpPost]
-        public IActionResult Post([FromBody] Estabelecimento estabelecimento)
+        public async Task<ActionResult<EstabelecimentoDTO>> Post([FromBody] EstabelecimentoDTO estabelecimentoModel)
         {
-            if (estabelecimento == null)
-            {
-                return BadRequest();
-            }
-            dbcontext.Estabelecimentos.Add(estabelecimento);
-            dbcontext.SaveChanges();
-            return CreatedAtAction(nameof(Get), new { id = estabelecimento.Id }, estabelecimento);
+            Estabelecimento estabelecimento = await _estabelecimentoRepositorio.AddEstabelecimento(_mapper.Map<Estabelecimento>(estabelecimentoModel));
+            return Ok(_mapper.Map<EstabelecimentoDTO>(estabelecimento));
         }
 
         [HttpPut("{id}")]
-        public IActionResult Put(int id, [FromBody] Estabelecimento estabelecimento)
+        public async Task<ActionResult<EstabelecimentoDTO>> Put([FromBody] EstabelecimentoDTO estabelecimentoModel, int id)
         {
-            if (estabelecimento == null || estabelecimento.Id != id)
-            {
-                return BadRequest();
-            }
-            var estabelecimentoExistente = dbcontext.Estabelecimentos.Find(id);
-            if (estabelecimentoExistente == null)
-            {
-                return NotFound();
-            }
-            estabelecimentoExistente.Nome = estabelecimento.Nome;
-            estabelecimentoExistente.Endereco = estabelecimento.Endereco;
-            estabelecimentoExistente.Estado = estabelecimento.Estado;
-            estabelecimentoExistente.Num_Telefone = estabelecimento.Num_Telefone;
-            dbcontext.SaveChanges();
-            return NoContent();
+            estabelecimentoModel.Id = id;
+
+            Estabelecimento estabelecimento = await _estabelecimentoRepositorio.UpdateEstabelecimento(_mapper.Map<Estabelecimento>(estabelecimentoModel), id);
+            return Ok(_mapper.Map<EstabelecimentoDTO>(estabelecimento));
         }
 
         [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
+        public async Task<bool> Delete(int id)
         {
-            var estabelecimento = dbcontext.Estabelecimentos.Find(id);
-            if (estabelecimento == null)
-            {
-                return NotFound();
-            }
-            dbcontext.Estabelecimentos.Remove(estabelecimento);
-            dbcontext.SaveChanges();
-            return NoContent();
+            bool apagado = await _estabelecimentoRepositorio.DeleteEstabelecimento(id);
+            return apagado;
         }
     }
 }

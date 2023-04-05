@@ -1,5 +1,8 @@
-﻿using APIChurrascaria.Infra.Data;
+﻿using APIChurrascaria.DTO;
+using APIChurrascaria.Infra.Data;
 using APIChurrascaria.Models;
+using APIChurrascaria.Repository.Interfaces;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -7,77 +10,53 @@ using Microsoft.EntityFrameworkCore;
 
 namespace APIChurrascaria.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/Estoque")]
     [ApiController]
     public class EstoqueController : ControllerBase
     {
-        private readonly ApplicationDbContext dbcontext;
-
-        public EstoqueController(ApplicationDbContext context)
+        private readonly IEstoqueRepositorio _estoqueRepositorio;
+        private readonly IMapper _mapper;
+        public EstoqueController(IClienteRepositorio estoqueRepositorio, IMapper mapper)
         {
-            dbcontext = context;
+            estoqueRepositorio = estoqueRepositorio;
+            _mapper = mapper;
         }
 
         [HttpGet]
-        public IActionResult Get()
+        public async Task<ActionResult<List<EstoqueDTO>>> Get()
         {
-            var estoques = dbcontext.Estoques.ToList();
-            return Ok(estoques);
+            List<Estoque> estoques = await _estoqueRepositorio.GetAllItens();
+            return Ok(_mapper.Map<EstoqueDTO>(estoques));
         }
 
         [HttpGet("{id}")]
-        public IActionResult Get(int id)
+        public async Task<ActionResult<EstoqueDTO>> Get(int id)
         {
-            var estoque = dbcontext.Estoques.Find(id);
-            if (estoque == null)
-            {
-                return NotFound();
-            }
-            return Ok(estoque);
+            Estoque estoque = await _estoqueRepositorio.GetEstoque(id);
+            return Ok(_mapper.Map<EstoqueDTO>(estoque));
         }
 
         [HttpPost]
-        public IActionResult Post([FromBody] Estoque estoque)
+        public async Task<ActionResult<EstoqueDTO>> Post([FromBody] EstoqueDTO estoqueModel)
         {
-            if (estoque == null)
-            {
-                return BadRequest();
-            }
-            dbcontext.Estoques.Add(estoque);
-            dbcontext.SaveChanges();
-            return CreatedAtAction(nameof(Get), new { id = estoque.Id }, estoque);
+            Estoque estoque = await _estoqueRepositorio.AddEstoque(_mapper.Map<Estoque>(estoqueModel));
+            return Ok(_mapper.Map<EstoqueDTO>(estoque));
         }
 
         [HttpPut("{id}")]
-        public IActionResult Put(int id, [FromBody] Estoque estoque)
+        public async Task<ActionResult<EstoqueDTO>> Put([FromBody] Estoque estoqueModel, int id)
         {
-            if (estoque == null || estoque.Id != id)
-            {
-                return BadRequest();
-            }
-            var estoqueExistente = dbcontext.Estoques.Find(id);
-            if (estoqueExistente == null)
-            {
-                return NotFound();
-            }
-            estoqueExistente.ProdutoId = estoque.ProdutoId;
-            estoqueExistente.Quantidade = estoque.Quantidade;
-            estoqueExistente.DtValidade = estoque.DtValidade;
-            dbcontext.SaveChanges();
-            return NoContent();
+            estoqueModel.Id = id;
+
+            Estoque estoque = await _estoqueRepositorio.UpdateEstoque(_mapper.Map<Estoque>(estoqueModel), id);
+            return Ok(_mapper.Map<EstoqueDTO>(estoque));
         }
 
         [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
+        public async Task<bool> Delete(int id)
         {
-            var estoque = dbcontext.Estoques.Find(id);
-            if (estoque == null)
-            {
-                return NotFound();
-            }
-            dbcontext.Estoques.Remove(estoque);
-            dbcontext.SaveChanges();
-            return NoContent();
+            bool apagado = await _estoqueRepositorio.DeleteEstoque(id);
+            return apagado;
         }
     }
 }

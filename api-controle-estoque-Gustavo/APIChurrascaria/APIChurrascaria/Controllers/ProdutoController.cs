@@ -1,83 +1,62 @@
-﻿using APIChurrascaria.Infra.Data;
+﻿using APIChurrascaria.DTO;
+using APIChurrascaria.Infra.Data;
 using APIChurrascaria.Models;
+using APIChurrascaria.Repository.Interfaces;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace APIChurrascaria.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/Produto")]
     [ApiController]
     public class ProdutoController : ControllerBase
     {
 
-        private readonly ApplicationDbContext dbcontext;
-
-        public ProdutoController(ApplicationDbContext context)
+        private readonly IProdutoRepositorio _produtoRepositorio;
+        private readonly IMapper _mapper;
+        public ProdutoController(IProdutoRepositorio produtoRepositorio, IMapper mapper)
         {
-            dbcontext = context;
+            _produtoRepositorio = produtoRepositorio;
+            _mapper = mapper;
         }
 
         [HttpGet]
-        public IActionResult Get()
+        public async Task<ActionResult<List<ProdutoDTO>>> GetAll()
         {
-            var produtos = dbcontext.Produtos.ToList();
-            return Ok(produtos);
+            List<Produto> produtos = await _produtoRepositorio.GetAllProdutos();
+            return Ok(_mapper.Map<ProdutoDTO>(produtos));
         }
 
         [HttpGet("{id}")]
-        public IActionResult Get(int id)
+        public async Task<ActionResult<ProdutoDTO>> Get(int id)
         {
-            var produto = dbcontext.Produtos.Find(id);
-            if (produto == null)
-            {
-                return NotFound();
-            }
-            return Ok(produto);
+            Produto produto = await _produtoRepositorio.GetProduto(id);
+            return Ok(_mapper.Map<ProdutoDTO>(produto));
         }
 
         [HttpPost]
-        public IActionResult Post([FromBody] Produto produto)
+        public async Task<ActionResult<ProdutoDTO>> Post([FromBody] Produto produtoModel)
         {
-            if (produto == null)
-            {
-                return BadRequest();
-            }
-            dbcontext.Produtos.Add(produto);
-            dbcontext.SaveChanges();
-            return CreatedAtAction(nameof(Get), new { id = produto.Id }, produto);
+            Produto produto = await _produtoRepositorio.AddProduto(_mapper.Map<Produto>(produtoModel));
+            return Ok(_mapper.Map<ProdutoDTO>(produto));
         }
 
         [HttpPut("{id}")]
-        public IActionResult Put(int id, [FromBody] Produto produto)
+        public async Task<ActionResult<ProdutoDTO>> Put([FromBody] Produto produtoModel, int id)
         {
-            if (produto == null || produto.Id != id)
-            {
-                return BadRequest();
-            }
-            var produtoExistente = dbcontext.Produtos.Find(id);
-            if (produtoExistente == null)
-            {
-                return NotFound();
-            }
-            produtoExistente.Nome = produto.Nome;
-            produtoExistente.Valor = produto.Valor;
-            produtoExistente.Quantidade = produto.Quantidade;
-            dbcontext.SaveChanges();
-            return NoContent();
+            produtoModel.Id = id;
+
+            Produto produto = await _produtoRepositorio.UpdateProduto(_mapper.Map<Produto>(produtoModel), id);
+            return Ok(_mapper.Map<ProdutoDTO>(produto));
         }
 
         [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
+        public async Task<bool> Delete(int id)
         {
-            var produto = dbcontext.Produtos.Find(id);
-            if (produto == null)
-            {
-                return NotFound();
-            }
-            dbcontext.Produtos.Remove(produto);
-            dbcontext.SaveChanges();
-            return NoContent();
+            bool apagado = await _produtoRepositorio.DeleteProduto(id);
+            return apagado;
         }
     }
 }

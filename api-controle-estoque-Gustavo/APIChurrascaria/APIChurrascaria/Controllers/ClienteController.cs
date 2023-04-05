@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace APIChurrascaria.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/Cliente")]
     [ApiController]
     public class ClienteController : ControllerBase
     {
