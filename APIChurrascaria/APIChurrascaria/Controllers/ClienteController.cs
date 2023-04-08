@@ -1,81 +1,73 @@
-﻿using APIChurrascaria.Infra.Data;
+﻿using APIChurrascaria.DTO;
 using APIChurrascaria.Models;
+using APIChurrascaria.Repository.Interfaces;
+using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 
 namespace APIChurrascaria.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/Cliente")]
     [ApiController]
+    [Authorize]
     public class ClienteController : ControllerBase
     {
-        
-        private readonly ApplicationDbContext dbcontext;
 
-        public ClienteController(ApplicationDbContext context)
+        private readonly IClienteRepositorio _clienteRepositorio;
+        private readonly IMapper _mapper;
+        public ClienteController(IClienteRepositorio clienteRepositorio, IMapper mapper)
         {
-            dbcontext = context;
+            _clienteRepositorio = clienteRepositorio;
+            _mapper = mapper;
         }
+        
+        //private readonly ApplicationDbContext dbcontext;
+
+        //public ClienteController(ApplicationDbContext context)
+        //{
+        //    dbcontext = context;
+        //}
 
         [HttpGet]
-        public IActionResult Get()
+        public async Task<ActionResult<List<ClienteDTO>>> GetAll()
         {
-            var clientes = dbcontext.Clientes.ToList();
-            return Ok(clientes);
+            List<Cliente> clientes = await _clienteRepositorio.GetAllCliente();
+            return Ok(_mapper.Map<List<ClienteDTO>>(clientes));
         }
 
         [HttpGet("{id}")]
-        public IActionResult Get(int id)
+        public async Task<ActionResult<ClienteDTO>> Get(int id)
         {
-            var cliente = dbcontext.Clientes.Find(id);
-            if (cliente == null)
-            {
-                return NotFound();
-            }
-            return Ok(cliente);
+            Cliente cliente = await _clienteRepositorio.GetClienteById(id);
+            return Ok(_mapper.Map<ClienteDTO>(cliente));
         }
 
         [HttpPost]
-        public IActionResult Post([FromBody] Cliente cliente)
+        public async Task<ActionResult<ClienteDTO>> Post([FromBody] ClienteDTO clienteModel)
         {
-            if (cliente == null || string.IsNullOrEmpty(cliente.Nome))
+            if (clienteModel == null || string.IsNullOrEmpty(clienteModel.Nome))
             {
                 return BadRequest();
             }
-            dbcontext.Clientes.Add(cliente);
-            dbcontext.SaveChanges();
-            return CreatedAtAction(nameof(Get), new { id = cliente.Id }, cliente);
+            Cliente cliente = await _clienteRepositorio.AddCliente(_mapper.Map<Cliente>(clienteModel));
+            return Ok(_mapper.Map<ClienteDTO>(cliente));
         }
 
         [HttpPut("{id}")]
-        public IActionResult Put(int id, [FromBody] Cliente cliente)
+        public async Task<ActionResult<ClienteDTO>> Put([FromBody] ClienteDTO cliente, int id)
         {
-            if (cliente == null || cliente.Id != id)
-            {
-                return BadRequest();
-            }
-            var clienteExistente = dbcontext.Clientes.Find(id);
-            if (clienteExistente == null)
-            {
-                return NotFound();
-            }
-            clienteExistente.Nome = cliente.Nome;
-            clienteExistente.Num_Mesa = cliente.Num_Mesa;
-            dbcontext.SaveChanges();
-            return NoContent();
+            cliente.Id = id;
+
+            Cliente clientePorId = await _clienteRepositorio.UpdateCliente(_mapper.Map<Cliente>(cliente), id);
+            return Ok(_mapper.Map<ClienteDTO>(clientePorId));
         }
 
         [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
+        public async Task<bool> Delete(int id)
         {
-            var cliente = dbcontext.Clientes.Find(id);
-            if (cliente == null)
-            {
-                return NotFound();
-            }
-            dbcontext.Clientes.Remove(cliente);
-            dbcontext.SaveChanges();
-            return NoContent();
+            bool apagado = await _clienteRepositorio.DeleteCliente(id);
+            return apagado;
         }
     }
 }

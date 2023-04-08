@@ -1,83 +1,62 @@
-﻿using APIChurrascaria.Infra.Data;
+﻿using APIChurrascaria.DTO;
 using APIChurrascaria.Models;
+using APIChurrascaria.Repository.Interfaces;
+using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace APIChurrascaria.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/Pedido")]
     [ApiController]
+    [Authorize]
     public class PedidoController : ControllerBase
     {
-        // GET: api/<PedidoController>
-        private readonly ApplicationDbContext dbcontext;
-
-        public PedidoController(ApplicationDbContext context)
+        private readonly IPedidoRepositorio _pedidoRepositorio;
+        private readonly IMapper _mapper;
+        public PedidoController(IPedidoRepositorio pedidoRepositorio, IMapper mapper)
         {
-            dbcontext = context;
+            _pedidoRepositorio = pedidoRepositorio;
+            _mapper = mapper;
         }
 
         [HttpGet]
-        public IActionResult Get()
+        public async Task<ActionResult<List<PedidoDTO>>> GetAll()
         {
-            var pedidos = dbcontext.Pedidos.ToList();
-            return Ok(pedidos);
+            List<Pedido> pedidos = await _pedidoRepositorio.GetAllPedidos();
+            return Ok(_mapper.Map<List<PedidoDTO>>(pedidos));
         }
 
         [HttpGet("{id}")]
-        public IActionResult Get(int id)
+        public async Task<ActionResult<PedidoDTO>> Get(int id)
         {
-            var pedido = dbcontext.Pedidos.Find(id);
-            if (pedido == null)
-            {
-                return NotFound();
-            }
-            return Ok(pedido);
+            Pedido pedido = await _pedidoRepositorio.GetPedido(id);
+            return Ok(_mapper.Map<PedidoDTO>(pedido));
         }
 
         [HttpPost]
-        public IActionResult Post([FromBody] Pedido pedido)
+        public async Task<ActionResult<PedidoDTO>> Post([FromBody] PedidoDTO pedidoModel)
         {
-            if (pedido == null)
-            {
-                return BadRequest();
-            }
-            dbcontext.Pedidos.Add(pedido);
-            dbcontext.SaveChanges();
-            return CreatedAtAction(nameof(Get), new { id = pedido.Id }, pedido);
+            Pedido pedido = await _pedidoRepositorio.AddPedido(_mapper.Map<Pedido>(pedidoModel));
+            return Ok(_mapper.Map<PedidoDTO>(pedido));
         }
 
         [HttpPut("{id}")]
-        public IActionResult Put(int id, [FromBody] Pedido pedido)
+        public async Task<ActionResult<PedidoDTO>> Put([FromBody] PedidoDTO pedidoModel, int id)
         {
-            if (pedido == null || pedido.Id != id)
-            {
-                return BadRequest();
-            }
-            var pedidoExistente = dbcontext.Pedidos.Find(id);
-            if (pedidoExistente == null)
-            {
-                return NotFound();
-            }
+            pedidoModel.Id = id;
 
-            pedidoExistente.Valor_Total = pedido.Valor_Total;
-            pedidoExistente.Status = pedido.Status;
-            dbcontext.SaveChanges();
-            return NoContent();
+            Pedido pedido = await _pedidoRepositorio.UpdatePedido(_mapper.Map<Pedido>(pedidoModel), id);
+            return Ok(_mapper.Map<PedidoDTO>(pedido));
         }
 
         [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
+        public async Task<bool> Delete(int id)
         {
-            var pedido = dbcontext.Pedidos.Find(id);
-            if (pedido == null)
-            {
-                return NotFound();
-            }
-            dbcontext.Pedidos.Remove(pedido);
-            dbcontext.SaveChanges();
-            return NoContent();
+            bool apagado = await _pedidoRepositorio.DeletePedido(id);
+            return apagado;
         }
     }
 }

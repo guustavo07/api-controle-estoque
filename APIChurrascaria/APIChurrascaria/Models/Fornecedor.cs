@@ -7,7 +7,7 @@
         public int CNPJ { get; set; }
         public string Endereco { get; set; }
         public string Email { get; set; }
-        public int Num_Telefone { get; set; }
+        public string Num_Telefone { get; set; }
 
         public List<EntradaProduto> EntradaProdutos { get; set; } = new List<EntradaProduto>();
         public List<ProdutoFornecedor> ProdutoFornecedor { get; set; } = new List<ProdutoFornecedor>();

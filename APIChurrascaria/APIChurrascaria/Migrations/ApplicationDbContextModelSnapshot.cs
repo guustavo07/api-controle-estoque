@@ -82,19 +82,16 @@ namespace APIChurrascaria.Migrations
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Endereco")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("Estado")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("Nome")
-                        .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int>("Num_Telefone")
-                        .HasColumnType("integer");
+                    b.Property<string>("Num_Telefone")
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -135,19 +132,16 @@ namespace APIChurrascaria.Migrations
                         .HasColumnType("integer");
 
                     b.Property<string>("Email")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("Endereco")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("Nome")
-                        .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int>("Num_Telefone")
-                        .HasColumnType("integer");
+                    b.Property<string>("Num_Telefone")
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -218,7 +212,6 @@ namespace APIChurrascaria.Migrations
                         .HasColumnType("integer");
 
                     b.Property<string>("Nome")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<int>("Quantidade")

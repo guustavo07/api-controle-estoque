@@ -1,7 +1,9 @@
-﻿using APIChurrascaria.Infra.Data;
+﻿using APIChurrascaria.DTO;
 using APIChurrascaria.Models;
+using APIChurrascaria.Repository.Interfaces;
+using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -9,94 +11,52 @@ namespace APIChurrascaria.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class EntradaProdutoController : ControllerBase
     {
-        private readonly ApplicationDbContext dbContext;
-
-        public EntradaProdutoController(ApplicationDbContext context)
+        private readonly IEntradaProdutoRepositorio _EntradaProdutoRepositorio;
+        private readonly IMapper _mapper;
+        public EntradaProdutoController(IEntradaProdutoRepositorio EntradaProdutoRepositorio, IMapper mapper)
         {
-            dbContext = context;
+            _EntradaProdutoRepositorio = EntradaProdutoRepositorio;
+            _mapper = mapper;
         }
 
         [HttpGet]
-        public IActionResult Get()
+        public async Task<ActionResult<List<EntradaDTO>>> GetAll()
         {
-            var entradas = dbContext.EntradasProdutos
-                .Include(e => e.FornecedorId)
-                .Include(e => e.ProdutoId)
-                .ToList();
-
-            return Ok(entradas);
+            List<EntradaProduto> entradaprodutos = await _EntradaProdutoRepositorio.GetAll();
+            return Ok(_mapper.Map<List<EntradaDTO>>(entradaprodutos));
         }
 
         [HttpGet("{id}")]
-        public IActionResult Get(int id)
+        public async Task<ActionResult<EntradaDTO>> Get(int id)
         {
-            var entrada = dbContext.EntradasProdutos
-                .Include(e => e.FornecedorId)
-                .Include(e => e.ProdutoId)
-                .FirstOrDefault(e => e.Id == id);
-
-            if (entrada == null)
-            {
-                return NotFound();
-            }
-
-            return Ok(entrada);
+            EntradaProduto entradaproduto = await _EntradaProdutoRepositorio.GetById(id);
+            return Ok(_mapper.Map<EntradaDTO>(entradaproduto));
         }
 
         [HttpPost]
-        public IActionResult Post([FromBody] EntradaProduto entradaProduto)
+        public async Task<ActionResult<EntradaDTO>> Post([FromBody] EntradaDTO entradaModel)
         {
-            if (entradaProduto == null)
-            {
-                return BadRequest();
-            }
-
-            dbContext.EntradasProdutos.Add(entradaProduto);
-            dbContext.SaveChanges();
-
-            return CreatedAtAction(nameof(Get), new { id = entradaProduto.Id }, entradaProduto);
+            EntradaProduto entradaProduto = await _EntradaProdutoRepositorio.AddEntrada(_mapper.Map<EntradaProduto>(entradaModel));
+            return Ok(_mapper.Map<EntradaDTO>(entradaProduto));
         }
 
         [HttpPut("{id}")]
-        public IActionResult Put(int id, [FromBody] EntradaProduto entradaProduto)
+        public async Task<ActionResult<EntradaDTO>> Put([FromBody] EntradaDTO entradaModel, int id)
         {
-            if (entradaProduto == null || entradaProduto.Id != id)
-            {
-                return BadRequest();
-            }
+            entradaModel.Id = id;
 
-            var entradaExistente = dbContext.EntradasProdutos.Find(id);
-            if (entradaExistente == null)
-            {
-                return NotFound();
-            }
-
-            entradaExistente.Quantidade = entradaProduto.Quantidade;
-            entradaExistente.DtValidade = entradaProduto.DtValidade;
-            entradaExistente.Num_Documento = entradaProduto.Num_Documento;
-            entradaExistente.FornecedorId = entradaProduto.FornecedorId;
-            entradaExistente.ProdutoId = entradaProduto.ProdutoId;
-
-            dbContext.SaveChanges();
-
-            return NoContent();
+            EntradaProduto entradaProduto = await _EntradaProdutoRepositorio.UpdateEntrada(_mapper.Map<EntradaProduto>(entradaModel), id);
+            return Ok(_mapper.Map<EntradaDTO>(entradaProduto));
         }
 
         [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
+        public async Task<bool> Delete(int id)
         {
-            var entrada = dbContext.EntradasProdutos.Find(id);
-            if (entrada == null)
-            {
-                return NotFound();
-            }
-
-            dbContext.EntradasProdutos.Remove(entrada);
-            dbContext.SaveChanges();
-
-            return NoContent();
+            bool apagado = await _EntradaProdutoRepositorio.DeleteEntrada(id);
+            return apagado;
         }
     }
 }
