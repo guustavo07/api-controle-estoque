@@ -1,5 +1,7 @@
-﻿using APIChurrascaria.DTO;
+﻿using System.Net;
+using APIChurrascaria.DTO;
 using APIChurrascaria.Models;
+using APIChurrascaria.Repository;
 using APIChurrascaria.Repository.Interfaces;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
@@ -25,38 +27,120 @@ namespace APIChurrascaria.Controllers
         [HttpGet]
         public async Task<ActionResult<List<EntradaDTO>>> GetAll()
         {
-            List<EntradaProduto> entradaprodutos = await _EntradaProdutoRepositorio.GetAll();
-            return Ok(_mapper.Map<List<EntradaDTO>>(entradaprodutos));
+            try
+            {
+                List<EntradaProduto> entradas = await _EntradaProdutoRepositorio.GetAll();
+
+                if (entradas == null)
+                {
+                    // Retorna um status code 404 (Not Found) se o recurso não for encontrado
+                    return NotFound();
+                }
+
+                return Ok(_mapper.Map<List<EntradaDTO>>(entradas));
+            }
+            catch (Exception ex)
+            {
+                // Logging do erro
+                Console.WriteLine(ex);
+
+                // Retorna uma resposta de erro com o status code apropriado
+                return StatusCode((int)HttpStatusCode.InternalServerError);
+            }
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<EntradaDTO>> Get(int id)
         {
-            EntradaProduto entradaproduto = await _EntradaProdutoRepositorio.GetById(id);
-            return Ok(_mapper.Map<EntradaDTO>(entradaproduto));
+            try
+            {
+                EntradaProduto entrada = await _EntradaProdutoRepositorio.GetById(id);
+
+                if (entrada == null)
+                {
+                    // Retorna um status code 404 (Not Found) se o recurso não for encontrado
+                    return NotFound();
+                }
+
+                return Ok(_mapper.Map<EntradaDTO>(entrada));
+            }
+            catch (Exception ex)
+            {
+                // Logging do erro
+                Console.WriteLine(ex);
+
+                // Retorna uma resposta de erro com o status code apropriado
+                return StatusCode((int)HttpStatusCode.InternalServerError);
+            }
         }
 
         [HttpPost]
         public async Task<ActionResult<EntradaDTO>> Post([FromBody] EntradaDTO entradaModel)
         {
-            EntradaProduto entradaProduto = await _EntradaProdutoRepositorio.AddEntrada(_mapper.Map<EntradaProduto>(entradaModel));
-            return Ok(_mapper.Map<EntradaDTO>(entradaProduto));
+            try
+            {
+                EntradaProduto entrada = await _EntradaProdutoRepositorio.AddEntrada(_mapper.Map<EntradaProduto>(entradaModel));
+                return Ok(_mapper.Map<EntradaDTO>(entrada));
+            }
+            catch (Exception ex)
+            {
+                // Logging do erro
+                Console.WriteLine(ex);
+
+                // Retorna uma resposta de erro com o status code apropriado
+                return StatusCode((int)HttpStatusCode.InternalServerError);
+            }
         }
 
         [HttpPut("{id}")]
         public async Task<ActionResult<EntradaDTO>> Put([FromBody] EntradaDTO entradaModel, int id)
         {
-            entradaModel.Id = id;
+            try
+            {
+                entradaModel.Id = id;
 
-            EntradaProduto entradaProduto = await _EntradaProdutoRepositorio.UpdateEntrada(_mapper.Map<EntradaProduto>(entradaModel), id);
-            return Ok(_mapper.Map<EntradaDTO>(entradaProduto));
+                EntradaProduto entrada = await _EntradaProdutoRepositorio.UpdateEntrada(_mapper.Map<EntradaProduto>(entradaModel), id);
+
+                if (entrada == null)
+                {
+                    // Retorna um status code 404 (Not Found) se o recurso não for encontrado
+                    return NotFound();
+                }
+
+                return Ok(_mapper.Map<EntradaDTO>(entrada));
+            }
+            catch (Exception ex)
+            {
+                // Logging do erro
+                Console.WriteLine(ex);
+
+                // Retorna uma resposta de erro com o status code apropriado
+                return StatusCode((int)HttpStatusCode.InternalServerError);
+            }
         }
 
         [HttpDelete("{id}")]
-        public async Task<bool> Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            bool apagado = await _EntradaProdutoRepositorio.DeleteEntrada(id);
-            return apagado;
+            try
+            {
+                bool apagado = await _EntradaProdutoRepositorio.DeleteEntrada(id);
+
+                if (apagado == false)
+                {
+                    // Retorna um status code 404 (Not Found) se o recurso não for encontrado
+                    return NotFound();
+                }
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                // Logging do erro
+                Console.WriteLine(ex);
+                // Retorna uma resposta de erro com o status code apropriado
+                return StatusCode((int)HttpStatusCode.InternalServerError);
+            }
         }
     }
 }

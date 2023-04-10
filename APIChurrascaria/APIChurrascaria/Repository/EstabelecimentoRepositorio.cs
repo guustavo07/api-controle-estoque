@@ -29,7 +29,7 @@ namespace APIChurrascaria.Repository
 
             if (estabelecimentoPorId == null)
             {
-                throw new Exception($"O estabelecimento {id}, não foi encontrado!");
+                return false;
             }
 
             _dbContext.Estabelecimentos.Remove(estabelecimentoPorId);

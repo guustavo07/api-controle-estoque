@@ -27,7 +27,7 @@ namespace APIChurrascaria.Repository
 
             if (fornecedorPorId == null)
             {
-                throw new Exception($"O Fornecedor para o ID: {id}, não foi encontrado");
+                return false;
             }
 
             _dbContext.Fornecedores.Remove(fornecedorPorId);

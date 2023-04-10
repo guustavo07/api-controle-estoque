@@ -29,7 +29,7 @@ namespace APIChurrascaria.Repository
 
             if(cliente == null)
             {
-                throw new Exception($"O Cliente para o ID: {id}, não foi encontrado!");
+                return false;
             }
 
             _dbContext.Clientes.Remove(cliente);

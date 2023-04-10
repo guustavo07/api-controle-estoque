@@ -1,5 +1,7 @@
-﻿using APIChurrascaria.DTO;
+﻿using System.Net;
+using APIChurrascaria.DTO;
 using APIChurrascaria.Models;
+using APIChurrascaria.Repository;
 using APIChurrascaria.Repository.Interfaces;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
@@ -25,38 +27,113 @@ namespace APIChurrascaria.Controllers
         [HttpGet]
         public async Task<ActionResult<List<PedidoDTO>>> GetAll()
         {
-            List<Pedido> pedidos = await _pedidoRepositorio.GetAllPedidos();
-            return Ok(_mapper.Map<List<PedidoDTO>>(pedidos));
+            try
+            {
+                List<Pedido> pedidos = await _pedidoRepositorio.GetAllPedidos();
+                return Ok(_mapper.Map<List<PedidoDTO>>(pedidos));
+            }
+            catch (Exception ex)
+            {
+                // Logging do erro
+                Console.WriteLine(ex);
+
+                // Retorna uma resposta de erro com o status code apropriado
+                return StatusCode((int)HttpStatusCode.InternalServerError);
+            }
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<PedidoDTO>> Get(int id)
         {
-            Pedido pedido = await _pedidoRepositorio.GetPedido(id);
-            return Ok(_mapper.Map<PedidoDTO>(pedido));
+            try
+            {
+                Pedido pedido = await _pedidoRepositorio.GetPedido(id);
+
+                if (pedido == null)
+                {
+                    // Retorna um status code 404 (Not Found) se o recurso não for encontrado
+                    return NotFound();
+                }
+
+                return Ok(_mapper.Map<PedidoDTO>(pedido));
+            }
+            catch (Exception ex)
+            {
+                // Logging do erro
+                Console.WriteLine(ex);
+
+                // Retorna uma resposta de erro com o status code apropriado
+                return StatusCode((int)HttpStatusCode.InternalServerError);
+            }
         }
 
         [HttpPost]
         public async Task<ActionResult<PedidoDTO>> Post([FromBody] PedidoDTO pedidoModel)
         {
-            Pedido pedido = await _pedidoRepositorio.AddPedido(_mapper.Map<Pedido>(pedidoModel));
-            return Ok(_mapper.Map<PedidoDTO>(pedido));
+            try
+            {
+                Pedido pedido = await _pedidoRepositorio.AddPedido(_mapper.Map<Pedido>(pedidoModel));
+                return Ok(_mapper.Map<PedidoDTO>(pedido));
+            }
+            catch (Exception ex)
+            {
+                // Logging do erro
+                Console.WriteLine(ex);
+
+                // Retorna uma resposta de erro com o status code apropriado
+                return StatusCode((int)HttpStatusCode.InternalServerError);
+            }
         }
 
         [HttpPut("{id}")]
         public async Task<ActionResult<PedidoDTO>> Put([FromBody] PedidoDTO pedidoModel, int id)
         {
-            pedidoModel.Id = id;
+            try
+            {
+                pedidoModel.Id = id;
 
-            Pedido pedido = await _pedidoRepositorio.UpdatePedido(_mapper.Map<Pedido>(pedidoModel), id);
-            return Ok(_mapper.Map<PedidoDTO>(pedido));
+                Pedido pedido = await _pedidoRepositorio.UpdatePedido(_mapper.Map<Pedido>(pedidoModel), id);
+
+                if (pedido == null)
+                {
+                    // Retorna um status code 404 (Not Found) se o recurso não for encontrado
+                    return NotFound();
+                }
+
+                return Ok(_mapper.Map<PedidoDTO>(pedido));
+            }
+            catch (Exception ex)
+            {
+                // Logging do erro
+                Console.WriteLine(ex);
+
+                // Retorna uma resposta de erro com o status code apropriado
+                return StatusCode((int)HttpStatusCode.InternalServerError);
+            }
         }
 
         [HttpDelete("{id}")]
-        public async Task<bool> Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            bool apagado = await _pedidoRepositorio.DeletePedido(id);
-            return apagado;
+            try
+            {
+                bool apagado = await _pedidoRepositorio.DeletePedido(id);
+
+                if (apagado == false)
+                {
+                    // Retorna um status code 404 (Not Found) se o recurso não for encontrado
+                    return NotFound();
+                }
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                // Logging do erro
+                Console.WriteLine(ex);
+                // Retorna uma resposta de erro com o status code apropriado
+                return StatusCode((int)HttpStatusCode.InternalServerError);
+            }
         }
     }
 }

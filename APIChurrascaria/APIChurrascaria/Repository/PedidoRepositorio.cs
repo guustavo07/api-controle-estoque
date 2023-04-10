@@ -29,7 +29,7 @@ namespace APIChurrascaria.Repository
 
             if (pedidoPorId == null)
             {
-                throw new Exception($"Pedido com ID: {id}, não foi encontrado!");
+                return false;
             }
 
             _dbContext.Pedidos.Remove(pedidoPorId);

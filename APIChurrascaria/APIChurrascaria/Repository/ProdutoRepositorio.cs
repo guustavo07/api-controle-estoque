@@ -28,7 +28,7 @@ namespace APIChurrascaria.Repository
             Produto produtoPorId = await GetProduto(id);
             if (produtoPorId == null)
             {
-                throw new Exception($"Produto para o ID: {id}, não foi encontrado!");
+                return false;
             }
 
             _dbContext.Produtos.Remove(produtoPorId);

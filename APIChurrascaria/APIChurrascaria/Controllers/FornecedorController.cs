@@ -1,5 +1,7 @@
-﻿using APIChurrascaria.DTO;
+﻿using System.Net;
+using APIChurrascaria.DTO;
 using APIChurrascaria.Models;
+using APIChurrascaria.Repository;
 using APIChurrascaria.Repository.Interfaces;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
@@ -25,38 +27,113 @@ namespace APIChurrascaria.Controllers
         [HttpGet]
         public async Task<ActionResult<List<FornecedorDTO>>> GetAll()
         {
-            List<Fornecedor> fornecedores = await _fornecedorRepositorio.GetAllFornecedor();
-            return Ok(_mapper.Map<List<FornecedorDTO>>(fornecedores));
+            try
+            {
+                List<Fornecedor> fornecedores = await _fornecedorRepositorio.GetAllFornecedor();
+                return Ok(_mapper.Map<List<FornecedorDTO>>(fornecedores));
+            }
+            catch (Exception ex)
+            {
+                // Logging do erro
+                Console.WriteLine(ex);
+
+                // Retorna uma resposta de erro com o status code apropriado
+                return StatusCode((int)HttpStatusCode.InternalServerError);
+            }
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<FornecedorDTO>> Get(int id)
         {
-            Fornecedor fornecedor = await _fornecedorRepositorio.GetFornecedor(id);
-            return Ok(_mapper.Map<FornecedorDTO>(fornecedor));
+            try
+            {
+                Fornecedor fornecedor = await _fornecedorRepositorio.GetFornecedor(id);
+
+                if (fornecedor == null)
+                {
+                    // Retorna um status code 404 (Not Found) se o recurso não for encontrado
+                    return NotFound();
+                }
+
+                return Ok(_mapper.Map<FornecedorDTO>(fornecedor));
+            }
+            catch (Exception ex)
+            {
+                // Logging do erro
+                Console.WriteLine(ex);
+
+                // Retorna uma resposta de erro com o status code apropriado
+                return StatusCode((int)HttpStatusCode.InternalServerError);
+            }
         }
 
         [HttpPost]
         public async Task<ActionResult<FornecedorDTO>> Post([FromBody] FornecedorDTO fornecedorModel)
         {
-            Fornecedor fornecedor = await _fornecedorRepositorio.AddFornecedor(_mapper.Map<Fornecedor>(fornecedorModel));
-            return Ok(_mapper.Map<FornecedorDTO>(fornecedor));
+            try
+            {
+                Fornecedor fornecedor = await _fornecedorRepositorio.AddFornecedor(_mapper.Map<Fornecedor>(fornecedorModel));
+                return Ok(_mapper.Map<FornecedorDTO>(fornecedor));
+            }
+            catch (Exception ex)
+            {
+                // Logging do erro
+                Console.WriteLine(ex);
+
+                // Retorna uma resposta de erro com o status code apropriado
+                return StatusCode((int)HttpStatusCode.InternalServerError);
+            }
         }
 
         [HttpPut("{id}")]
         public async Task<ActionResult<FornecedorDTO>> Put([FromBody] FornecedorDTO fornecedorModel, int id)
         {
-            fornecedorModel.Id = id;
+            try
+            {
+                fornecedorModel.Id = id;
 
-            Fornecedor fornecedor = await _fornecedorRepositorio.UpdateFornecedor(_mapper.Map<Fornecedor>(fornecedorModel), id);
-            return Ok(_mapper.Map<FornecedorDTO>(fornecedor));
+                Fornecedor fornecedor = await _fornecedorRepositorio.UpdateFornecedor(_mapper.Map<Fornecedor>(fornecedorModel), id);
+
+                if (fornecedor == null)
+                {
+                    // Retorna um status code 404 (Not Found) se o recurso não for encontrado
+                    return NotFound();
+                }
+
+                return Ok(_mapper.Map<FornecedorDTO>(fornecedor));
+            }
+            catch (Exception ex)
+            {
+                // Logging do erro
+                Console.WriteLine(ex);
+
+                // Retorna uma resposta de erro com o status code apropriado
+                return StatusCode((int)HttpStatusCode.InternalServerError);
+            }
         }
 
         [HttpDelete("{id}")]
-        public async Task<bool> Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            bool apagado = await _fornecedorRepositorio.DeleteFornecedor(id);
-            return apagado;
+            try
+            {
+                bool apagado = await _fornecedorRepositorio.DeleteFornecedor(id);
+
+                if (apagado == false)
+                {
+                    // Retorna um status code 404 (Not Found) se o recurso não for encontrado
+                    return NotFound();
+                }
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                // Logging do erro
+                Console.WriteLine(ex);
+                // Retorna uma resposta de erro com o status code apropriado
+                return StatusCode((int)HttpStatusCode.InternalServerError);
+            }
         }
     }
 }

@@ -1,5 +1,7 @@
-﻿using APIChurrascaria.DTO;
+﻿using System.Net;
+using APIChurrascaria.DTO;
 using APIChurrascaria.Models;
+using APIChurrascaria.Repository;
 using APIChurrascaria.Repository.Interfaces;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
@@ -25,38 +27,113 @@ namespace APIChurrascaria.Controllers
         [HttpGet]
         public async Task<ActionResult<List<EstoqueDTO>>> GetAll()
         {
-            List<Estoque> estoques = await _estoqueRepositorio.GetAllItens();
-            return Ok(_mapper.Map<List<EstoqueDTO>>(estoques));
+            try
+            {
+                List<Estoque> estoques = await _estoqueRepositorio.GetAllItens();
+                return Ok(_mapper.Map<List<EstoqueDTO>>(estoques));
+            }
+            catch (Exception ex)
+            {
+                // Logging do erro
+                Console.WriteLine(ex);
+
+                // Retorna uma resposta de erro com o status code apropriado
+                return StatusCode((int)HttpStatusCode.InternalServerError);
+            }
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<EstoqueDTO>> Get(int id)
         {
-            Estoque estoque = await _estoqueRepositorio.GetEstoque(id);
-            return Ok(_mapper.Map<EstoqueDTO>(estoque));
+            try
+            {
+                Estoque estoque = await _estoqueRepositorio.GetEstoque(id);
+
+                if (estoque == null)
+                {
+                    // Retorna um status code 404 (Not Found) se o recurso não for encontrado
+                    return NotFound();
+                }
+
+                return Ok(_mapper.Map<EstoqueDTO>(estoque));
+            }
+            catch (Exception ex)
+            {
+                // Logging do erro
+                Console.WriteLine(ex);
+
+                // Retorna uma resposta de erro com o status code apropriado
+                return StatusCode((int)HttpStatusCode.InternalServerError);
+            }
         }
 
         [HttpPost]
         public async Task<ActionResult<EstoqueDTO>> Post([FromBody] EstoqueDTO estoqueModel)
         {
-            Estoque estoque = await _estoqueRepositorio.AddEstoque(_mapper.Map<Estoque>(estoqueModel));
-            return Ok(_mapper.Map<EstoqueDTO>(estoque));
+            try
+            {
+                Estoque estoque = await _estoqueRepositorio.AddEstoque(_mapper.Map<Estoque>(estoqueModel));
+                return Ok(_mapper.Map<EstoqueDTO>(estoque));
+            }
+            catch (Exception ex)
+            {
+                // Logging do erro
+                Console.WriteLine(ex);
+
+                // Retorna uma resposta de erro com o status code apropriado
+                return StatusCode((int)HttpStatusCode.InternalServerError);
+            }
         }
 
         [HttpPut("{id}")]
         public async Task<ActionResult<EstoqueDTO>> Put([FromBody] EstoqueDTO estoqueModel, int id)
         {
-            estoqueModel.Id = id;
+            try
+            {
+                estoqueModel.Id = id;
 
-            Estoque estoque = await _estoqueRepositorio.UpdateEstoque(_mapper.Map<Estoque>(estoqueModel), id);
-            return Ok(_mapper.Map<EstoqueDTO>(estoque));
+                Estoque estoque = await _estoqueRepositorio.UpdateEstoque(_mapper.Map<Estoque>(estoqueModel), id);
+
+                if (estoque == null)
+                {
+                    // Retorna um status code 404 (Not Found) se o recurso não for encontrado
+                    return NotFound();
+                }
+
+                return Ok(_mapper.Map<EstoqueDTO>(estoque));
+            }
+            catch (Exception ex)
+            {
+                // Logging do erro
+                Console.WriteLine(ex);
+
+                // Retorna uma resposta de erro com o status code apropriado
+                return StatusCode((int)HttpStatusCode.InternalServerError);
+            }
         }
 
         [HttpDelete("{id}")]
-        public async Task<bool> Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            bool apagado = await _estoqueRepositorio.DeleteEstoque(id);
-            return apagado;
+            try
+            {
+                bool apagado = await _estoqueRepositorio.DeleteEstoque(id);
+
+                if (apagado == false)
+                {
+                    // Retorna um status code 404 (Not Found) se o recurso não for encontrado
+                    return NotFound();
+                }
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                // Logging do erro
+                Console.WriteLine(ex);
+                // Retorna uma resposta de erro com o status code apropriado
+                return StatusCode((int)HttpStatusCode.InternalServerError);
+            }
         }
     }
 }

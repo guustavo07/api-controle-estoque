@@ -29,7 +29,7 @@ namespace APIChurrascaria.Repository
 
             if (entradaPorId == null)
             {
-                throw new Exception($"A entrada com ID: {id}, não foi encontrado!");
+                return false;
             }
 
             _dbContext.EntradasProdutos.Remove(entradaPorId);

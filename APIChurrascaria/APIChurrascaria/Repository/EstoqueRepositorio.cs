@@ -28,7 +28,7 @@ namespace APIChurrascaria.Repository
 
             if (estoque == null)
             {
-                throw new Exception($"O Estoque para o ID: {id}, não foi encontrado!");
+                return false;
             }
 
             _dbContext.Remove(estoque);

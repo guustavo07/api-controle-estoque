@@ -62,7 +62,7 @@ if (app.Environment.IsDevelopment())
             $"/swagger/{description.GroupName}/swagger.json",
             description.GroupName);
         }
-        options.RoutePrefix = string.Empty;
+        options.RoutePrefix = "swagger";
 
         options.DocExpansion(DocExpansion.List);
     });
