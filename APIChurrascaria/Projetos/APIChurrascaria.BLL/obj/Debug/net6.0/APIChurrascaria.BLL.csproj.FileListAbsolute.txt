@@ -1,0 +1,14 @@
+C:\Users\Meta3\Downloads\api-controle-estoque-att\api-controle-estoque-Victor\api-controle-estoque-Gustavo\APIChurrascaria-att\Projetos\APIChurrascaria.BLL\obj\Debug\net6.0\APIChurrascaria.BLL.csproj.AssemblyReference.cache
+C:\Users\Meta3\Downloads\api-controle-estoque-att\api-controle-estoque-Victor\api-controle-estoque-Gustavo\APIChurrascaria-att\Projetos\APIChurrascaria.BLL\obj\Debug\net6.0\APIChurrascaria.BLL.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Meta3\Downloads\api-controle-estoque-att\api-controle-estoque-Victor\api-controle-estoque-Gustavo\APIChurrascaria-att\Projetos\APIChurrascaria.BLL\obj\Debug\net6.0\APIChurrascaria.BLL.AssemblyInfoInputs.cache
+C:\Users\Meta3\Downloads\api-controle-estoque-att\api-controle-estoque-Victor\api-controle-estoque-Gustavo\APIChurrascaria-att\Projetos\APIChurrascaria.BLL\obj\Debug\net6.0\APIChurrascaria.BLL.AssemblyInfo.cs
+C:\Users\Meta3\Downloads\api-controle-estoque-att\api-controle-estoque-Victor\api-controle-estoque-Gustavo\APIChurrascaria-att\Projetos\APIChurrascaria.BLL\obj\Debug\net6.0\APIChurrascaria.BLL.csproj.CoreCompileInputs.cache
+C:\Users\Meta3\Downloads\api-controle-estoque-att\api-controle-estoque-Victor\api-controle-estoque-Gustavo\APIChurrascaria-att\Projetos\APIChurrascaria.BLL\bin\Debug\net6.0\APIChurrascaria.BLL.deps.json
+C:\Users\Meta3\Downloads\api-controle-estoque-att\api-controle-estoque-Victor\api-controle-estoque-Gustavo\APIChurrascaria-att\Projetos\APIChurrascaria.BLL\bin\Debug\net6.0\APIChurrascaria.BLL.runtimeconfig.json
+C:\Users\Meta3\Downloads\api-controle-estoque-att\api-controle-estoque-Victor\api-controle-estoque-Gustavo\APIChurrascaria-att\Projetos\APIChurrascaria.BLL\bin\Debug\net6.0\APIChurrascaria.BLL.dll
+C:\Users\Meta3\Downloads\api-controle-estoque-att\api-controle-estoque-Victor\api-controle-estoque-Gustavo\APIChurrascaria-att\Projetos\APIChurrascaria.BLL\bin\Debug\net6.0\APIChurrascaria.BLL.pdb
+C:\Users\Meta3\Downloads\api-controle-estoque-att\api-controle-estoque-Victor\api-controle-estoque-Gustavo\APIChurrascaria-att\Projetos\APIChurrascaria.BLL\obj\Debug\net6.0\APIChurrascaria.BLL.dll
+C:\Users\Meta3\Downloads\api-controle-estoque-att\api-controle-estoque-Victor\api-controle-estoque-Gustavo\APIChurrascaria-att\Projetos\APIChurrascaria.BLL\obj\Debug\net6.0\refint\APIChurrascaria.BLL.dll
+C:\Users\Meta3\Downloads\api-controle-estoque-att\api-controle-estoque-Victor\api-controle-estoque-Gustavo\APIChurrascaria-att\Projetos\APIChurrascaria.BLL\obj\Debug\net6.0\APIChurrascaria.BLL.pdb
+C:\Users\Meta3\Downloads\api-controle-estoque-att\api-controle-estoque-Victor\api-controle-estoque-Gustavo\APIChurrascaria-att\Projetos\APIChurrascaria.BLL\obj\Debug\net6.0\APIChurrascaria.BLL.genruntimeconfig.cache
+C:\Users\Meta3\Downloads\api-controle-estoque-att\api-controle-estoque-Victor\api-controle-estoque-Gustavo\APIChurrascaria-att\Projetos\APIChurrascaria.BLL\obj\Debug\net6.0\ref\APIChurrascaria.BLL.dll
